@@ -11,7 +11,7 @@ import { map, switchMap } from 'rxjs/operators';
   styleUrls: ['./book-detail.component.scss']
 })
 export class BookDetailComponent implements OnInit {
-  book$: Observable<Book | Error>;
+  book$!: Observable<Book>;
 
 
   constructor(
@@ -22,7 +22,7 @@ export class BookDetailComponent implements OnInit {
 
   ngOnInit(): void {
     this.book$ = this.route.params
-      .pipe(map(params => params.id))
+      .pipe(map(params => params['id']))
       .pipe(switchMap(id => this.bookService.getBook(id)))
   }
 

@@ -11,7 +11,7 @@ import { Book } from '../../models/book';
 })
 export class BooksListComponent implements OnInit {
 
-  books$: Observable<Page<Book> | Error>;
+  books$!: Observable<Page<Book>>;
 
   constructor(
     private bookService: BookService,

@@ -2,12 +2,69 @@
   <mat-card>
     <mat-card-title>Books</mat-card-title>
     <mat-card-content>
-      <mat-nav-list *ngIf="(books$ | async) as books">
-        <a mat-list-item *ngFor="let book of books.content" [routerLink]="['/books', book.id]">
-          {{book.title}}
-        </a>
-      </mat-nav-list>
+      <table mat-table [dataSource]="dataSource">
+        <ng-container matColumnDef="id">
+          <th mat-header-cell *matHeaderCellDef>Id</th>
+          <td mat-cell *matCellDef="let book" [routerLink]="['/books', book.id]" style="cursor: pointer;">{{book.id}}
+          </td>
+        </ng-container>
+        <ng-container matColumnDef="title">
+          <th mat-header-cell *matHeaderCellDef>Title</th>
+          <td mat-cell *matCellDef="let book" [routerLink]="['/books', book.id]" style="cursor: pointer;">
+            {{book.title}}
+          </td>
+        </ng-container>
+        <ng-container matColumnDef="author">
+          <th mat-header-cell *matHeaderCellDef>Author</th>
+          <td mat-cell *matCellDef="let book" [routerLink]="['/books', book.id]" style="cursor: pointer;">
+            {{book.author}}
+          </td>
+        </ng-container>
+        <ng-container matColumnDef="genre">
+          <th mat-header-cell *matHeaderCellDef>Genre</th>
+          <td mat-cell *matCellDef="let book" [routerLink]="['/books', book.id]" style="cursor: pointer;">
+            {{book.genre}}
+          </td>
+        </ng-container>
+        <ng-container matColumnDef="year">
+          <th mat-header-cell *matHeaderCellDef>Year</th>
+          <td mat-cell *matCellDef="let book" [routerLink]="['/books', book.id]" style="cursor: pointer;">
+            {{book.year}}
+          </td>
+        </ng-container>
+        <ng-container matColumnDef="added">
+          <th mat-header-cell *matHeaderCellDef>Added</th>
+          <td mat-cell *matCellDef="let book" [routerLink]="['/books', book.id]" style="cursor: pointer;">
+            {{book.added}}
+          </td>
+        </ng-container>
+        <ng-container matColumnDef="checkOutCount">
+          <th mat-header-cell *matHeaderCellDef>Checkout count</th>
+          <td mat-cell *matCellDef="let book" [routerLink]="['/books', book.id]" style="cursor: pointer;">
+            {{book.checkOutCount}}
+          </td>
+        </ng-container>
+        <ng-container matColumnDef="status">
+          <th mat-header-cell *matHeaderCellDef>Status</th>
+          <td mat-cell *matCellDef="let book" [routerLink]="['/books', book.id]" style="cursor: pointer;">
+            {{book.status}}
+          </td>
+        </ng-container>
+        <ng-container matColumnDef="dueDate">
+          <th mat-header-cell *matHeaderCellDef>Due date</th>
+          <td mat-cell *matCellDef="let book" [routerLink]="['/books', book.id]" style="cursor: pointer;">
+            {{book.dueDate}}
+          </td>
+        </ng-container>
+        <ng-container matColumnDef="comment">
+          <th mat-header-cell *matHeaderCellDef>Comment</th>
+          <td mat-cell *matCellDef="let book" [routerLink]="['/books', book.id]" style="cursor: pointer;">
+            {{book.comment}}
+          </td>
+        </ng-container>
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+      </table>
     </mat-card-content>
   </mat-card>
 </div>
-

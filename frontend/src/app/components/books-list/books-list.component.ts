@@ -13,9 +13,23 @@ import { MatTableDataSource } from '@angular/material/table';
 export class BooksListComponent implements OnInit {
 
   displayedColumns: string[] = ['id', 'title', 'author', 'genre', 'year', 'added', 'checkOutCount', 'status', 'dueDate', 'comment'];
+  book: Book = {
+      id: '',
+      title: '',
+      author: '',
+      genre: '',
+      year: 0,
+      added: '',
+      checkOutCount: 0,
+      status: 'PROCESSING',
+      dueDate: '',
+      comment: ''
+    };
+  showForm: boolean = false;
   books$!: Observable<Page<Book>>;
   dataSource!: MatTableDataSource<Book>;
   searchText: string = '';
+  FormSearchText: string = '';
   selectedStatus: string = '';
   filteredBooks: Book[] = [];
 
@@ -28,6 +42,93 @@ export class BooksListComponent implements OnInit {
     // TODO this observable should emit books taking into consideration pagination, sorting and filtering options.
     this.bookService.getBooks({}).subscribe((page: Page<Book>) => {
       this.dataSource = new MatTableDataSource(Array.from(page.content));
+    });
+  }
+
+  searchBooks() {
+    // get all books and then filter by the provided values
+    this.bookService.getBooks({}).subscribe((books) => {
+      // declare filteredBooks as an array of books to be filtered
+      let filteredBooks = books.content;
+      // if id is provided, apply id filter to all books
+      if (this.book.id) {
+        // filter books by id
+        filteredBooks = filteredBooks.filter((book) => book.id == this.book.id);
+      }
+      // if title is provided, apply title filter to all books
+      if (this.book.title) {
+        // filter books by title
+        filteredBooks = filteredBooks.filter(
+          (book) => book.title === this.book.title
+        );
+      }
+      // if author is provided, apply author filter to all books
+      if (this.book.author) {
+        // filter books by author
+        filteredBooks = filteredBooks.filter(
+          (book) => book.author === this.book.author
+        );
+      }
+      // if genre is provided, apply genre filter to all books
+      if (this.book.genre) {
+        // filter books by genre
+        filteredBooks = filteredBooks.filter(
+          (book) => book.genre === this.book.genre
+        );
+      }
+      // if year is provided, apply year filter to all books
+      if (this.book.year) {
+        // filter books by year
+        filteredBooks = filteredBooks.filter(
+          (book) => book.year === this.book.year
+        );
+      }
+      // if added is provided, apply added filter to all books
+      if (this.book.added) {
+        // filter books by added
+        filteredBooks = filteredBooks.filter(
+          (book) => book.added === this.book.added
+        );
+      }
+      // if checkOutCount is provided, apply checkOutCount filter to all books
+      if (this.book.checkOutCount) {
+        // filter books by checkOutCount
+        filteredBooks = filteredBooks.filter(
+          (book) => book.checkOutCount === this.book.checkOutCount
+        );
+      }
+      // if status is provided, apply status filter to all books
+      if (this.book.status !== "PROCESSING") {
+        // filter books by status
+        filteredBooks = filteredBooks.filter(
+          (book) => book.status === this.book.status
+        );
+      }
+      // if dueDate is provided, apply dueDate filter to all books
+      if (this.book.dueDate) {
+        // filter books by dueDate
+        filteredBooks = filteredBooks.filter(
+          (book) => book.dueDate === this.book.dueDate
+        );
+      }
+      // if comment is provided, apply comment filter to all books
+      if (this.book.comment) {
+        // filter books by comment
+        filteredBooks = filteredBooks.filter(
+          (book) => book.comment === this.book.comment
+        );
+      }
+      // apply search filter to filtered books
+      if (filteredBooks?.length) {
+        this.dataSource.data = filteredBooks;
+        this.dataSource.filter = this.FormSearchText.trim().toLowerCase();
+      } else if (filteredBooks.length === 0) {
+        alert("Did not find any books with the provided criteria");
+      } else {
+        // apply search filter to non-filtered books
+        this.dataSource.data = books.content;
+        this.dataSource.filter = this.FormSearchText.trim().toLowerCase();
+      }
     });
   }
 

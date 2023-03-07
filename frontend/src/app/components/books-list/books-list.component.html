@@ -1,10 +1,10 @@
 <div class="container mat-elevation-z4">
   <mat-card>
     <mat-card-title>Books</mat-card-title>
-    <mat-form-field>
+    <mat-form-field *ngIf="!showForm">
       <input matInput type="text" placeholder="Search books" [(ngModel)]="searchText" (input)="applyFilter()"/>
     </mat-form-field>
-    <mat-form-field>
+    <mat-form-field *ngIf="!showForm">
       <mat-label>Status</mat-label>
       <mat-select [(ngModel)]="selectedStatus">
         <mat-option value="All" (click)="applyStatusFilter()">All</mat-option>
@@ -12,6 +12,61 @@
         <mat-option value="BORROWED" (click)="applyStatusFilter()">Checked Out</mat-option>
       </mat-select>
     </mat-form-field>
+    <mat-card>
+      <mat-card-title (click)="showForm = !showForm" style="cursor: pointer; background-color: #007bff; color: #fff; padding: 10px 20px; border-radius: 5px;">Advanced search form for books by the exact criteria</mat-card-title>
+      <form *ngIf="showForm" (ngSubmit)="searchBooks()">
+        <mat-form-field>
+          <label for="FormSearchText">Search text:</label>
+          <input matInput type="text" id="FormSearchText" name="FormSearchText" placeholder="" [(ngModel)]="FormSearchText"/>
+        </mat-form-field>
+        <mat-form-field class="form-group" style="align-content: center;">
+          <label for="id">Id:</label>
+          <input matInput type="text" id="id" name="id" [(ngModel)]="book.id">
+        </mat-form-field>
+        <mat-form-field class="form-group">
+          <label for="title">Title:</label>
+          <input matInput type="text" id="title" name="title" [(ngModel)]="book.title">
+        </mat-form-field>
+        <mat-form-field class="form-group">
+          <label for="author">Author:</label>
+          <input matInput type="text" id="author" name="author" [(ngModel)]="book.author">
+        </mat-form-field>
+        <mat-form-field class="form-group">
+          <label for="genre">Genre:</label>
+          <input matInput type="text" id="genre" name="genre" [(ngModel)]="book.genre">
+        </mat-form-field>
+        <mat-form-field class="form-group">
+          <label for="year">Year:</label>
+          <input matInput type="number" id="year" name="author" [(ngModel)]="book.year">
+        </mat-form-field>
+        <mat-form-field class="form-group">
+          <label for="added">Added:</label>
+          <input matInput type="text" id="added" name="added" [(ngModel)]="book.added">
+        </mat-form-field>
+        <mat-form-field class="form-group">
+          <label for="checkOutCount">Checkout count:</label>
+          <input matInput type="number" id="checkOutCount" name="checkOutCount" [(ngModel)]="book.checkOutCount">
+        </mat-form-field>
+        <mat-form-field class="form-group">
+          <label for="status">Status:</label>
+          <select matNativeControl id="status" name="status" [(ngModel)]="book.status">
+            <option value="PROCESSING">All</option>
+            <option value="AVAILABLE">Available</option>
+            <option value="BORROWED">Borrowed</option>
+          </select>
+        </mat-form-field>
+        <mat-form-field class="form-group">
+          <label for="dueDate">Due date:</label>
+          <input matInput type="text" id="dueDate" name="dueDate" [(ngModel)]="book.dueDate">
+        </mat-form-field>
+        <mat-form-field class="form-group">
+          <label for="comment">Comment:</label>
+          <input matInput type="text" id="comment" name="comment" [(ngModel)]="book.comment">
+        </mat-form-field>
+        <button type="submit" style="cursor: pointer; background-color: #007bff; color: white; border-radius: 5px; padding: 10px 20px; margin-left: 5%; font-size: 16px; border: none;">Search</button>
+      </form>
+
+    </mat-card>
     <mat-card-content>
       <table mat-table [dataSource]="dataSource">
         <ng-container matColumnDef="id">

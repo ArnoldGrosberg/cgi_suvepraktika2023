@@ -3,7 +3,7 @@ import { BookService } from '../../services/book.service';
 import { Observable } from 'rxjs';
 import { Page } from '../../models/page';
 import { Book } from '../../models/book';
-import { MatTableDataSource } from '@angular/material/table'
+import { MatTableDataSource } from '@angular/material/table';
 
 @Component({
   selector: 'app-books-list',
@@ -15,6 +15,8 @@ export class BooksListComponent implements OnInit {
   displayedColumns: string[] = ['id', 'title', 'author', 'genre', 'year', 'added', 'checkOutCount', 'status', 'dueDate', 'comment'];
   books$!: Observable<Page<Book>>;
   dataSource!: MatTableDataSource<Book>;
+  searchText: string = '';
+
 
   constructor(
     private bookService: BookService,
@@ -27,5 +29,8 @@ export class BooksListComponent implements OnInit {
       this.dataSource = new MatTableDataSource(Array.from(page.content));
     });
   }
-
+  applyFilter() {
+      const filterValue = this.searchText.trim().toLowerCase();
+      this.dataSource.filter = filterValue;
+    }
 }

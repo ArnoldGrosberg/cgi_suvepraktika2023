@@ -1,6 +1,9 @@
 <div class="container mat-elevation-z4">
   <mat-card>
     <mat-card-title>Books</mat-card-title>
+    <mat-form-field>
+      <input matInput type="text" placeholder="Search books" [(ngModel)]="searchText" (input)="applyFilter()"/>
+    </mat-form-field>
     <mat-card-content>
       <table mat-table [dataSource]="dataSource">
         <ng-container matColumnDef="id">

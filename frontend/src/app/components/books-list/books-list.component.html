@@ -4,6 +4,14 @@
     <mat-form-field>
       <input matInput type="text" placeholder="Search books" [(ngModel)]="searchText" (input)="applyFilter()"/>
     </mat-form-field>
+    <mat-form-field>
+      <mat-label>Status</mat-label>
+      <mat-select [(ngModel)]="selectedStatus">
+        <mat-option value="All" (click)="applyStatusFilter()">All</mat-option>
+        <mat-option value="AVAILABLE" (click)="applyStatusFilter()">Available</mat-option>
+        <mat-option value="BORROWED" (click)="applyStatusFilter()">Checked Out</mat-option>
+      </mat-select>
+    </mat-form-field>
     <mat-card-content>
       <table mat-table [dataSource]="dataSource">
         <ng-container matColumnDef="id">

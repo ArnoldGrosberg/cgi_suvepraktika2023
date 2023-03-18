@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { BookService } from '../../services/book.service';
 import { Book } from '../../models/book';
 import { Observable } from 'rxjs';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { map, switchMap } from 'rxjs/operators';
 import { MatTableDataSource } from '@angular/material/table';
 
@@ -19,6 +19,7 @@ export class BookDetailComponent implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private bookService: BookService,
+    private router: Router
   ) {
   }
 
@@ -31,5 +32,28 @@ export class BookDetailComponent implements OnInit {
         return book;
       }));
   }
+  deleteBook(book: Book): void {
+    if (confirm("Are you sure you want to delete this book?")) {
+    if (book.status === 'BORROWED') {
+      alert('Book is checked out and cannot be deleted.');
+      return;
+    } else {
+      this.bookService.deleteBook(book.id).subscribe(
+        () => this.onBookDeleted(),
+        (error) => this.onDeleteError(error)
+      );
+      }
+    }
+  }
 
+  private onBookDeleted(): void {
+    this.router.navigate(['/books']).then(() =>
+      alert('Book deleted successfully!')
+    );
+  }
+
+  private onDeleteError(error: any): void {
+    console.error(error);
+    alert('An error occurred while deleting the book.');
+  }
 }

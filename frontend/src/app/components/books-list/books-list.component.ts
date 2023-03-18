@@ -4,6 +4,8 @@ import { Observable } from 'rxjs';
 import { Page } from '../../models/page';
 import { Book } from '../../models/book';
 import { MatTableDataSource } from '@angular/material/table';
+import { MatPaginatorModule } from '@angular/material/paginator';
+import { PageEvent } from '@angular/material/paginator';
 
 @Component({
   selector: 'app-books-list',
@@ -32,6 +34,18 @@ export class BooksListComponent implements OnInit {
   FormSearchText: string = '';
   selectedStatus: string = '';
   filteredBooks: Book[] = [];
+  totalItems = 0; // total number of items
+  pageSize = 10; // number of items per page
+  pageSizeOptions: number[] = [5, 10, 25, 100]; // available page size options
+  currentPage = 0; // current page index
+
+  onPageChange(event: PageEvent) {
+    this.currentPage = event.pageIndex;
+    this.pageSize = event.pageSize;
+    this.bookService.getBooks({pageIndex: this.currentPage, pageSize: this.pageSize}).subscribe((page: Page<Book>) => {
+      this.dataSource = new MatTableDataSource(Array.from(page.content));
+    });;
+  }
 
   constructor(
     private bookService: BookService,
@@ -40,9 +54,10 @@ export class BooksListComponent implements OnInit {
 
   ngOnInit(): void {
     // TODO this observable should emit books taking into consideration pagination, sorting and filtering options.
-    this.bookService.getBooks({}).subscribe((page: Page<Book>) => {
+    this.bookService.getBooks({pageIndex: this.currentPage, pageSize: this.pageSize}).subscribe((page: Page<Book>) => {
+    this.totalItems = page.totalElements;
       this.dataSource = new MatTableDataSource(Array.from(page.content));
-    });
+    });;
   }
 
   searchBooks() {

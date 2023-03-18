@@ -84,4 +84,19 @@ export class BookDetailComponent implements OnInit {
     console.error(error);
     alert('An error occurred while deleting the book.');
   }
+
+  isBookOverdue(book: Book) {
+    if (!book.dueDate) {
+      return false;
+    }
+    // get current date
+    let currentDate = new Date();
+    // get due date
+    let dueDate = new Date(book.dueDate);
+    // if due date is before current date, book is overdue
+    if (dueDate < currentDate) {
+      return true;
+    }
+    return false;
+  }
 }

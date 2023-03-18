@@ -67,8 +67,88 @@
       </form>
 
     </mat-card>
+    <button class="favorite-btn" (click)="showFavoriteBooks = !showFavoriteBooks" mat-button color="primary" style="margin-top: 20px;">Show favorite books</button>
+    <div *ngIf="showFavoriteBooks" id="favorite-books" style="margin-bottom: 20px;">
+      <mat-card-content>
+        <table mat-table [dataSource]="favoriteBooksDataSource">
+          <ng-container matColumnDef="favoriteBtn">
+            <th mat-header-cell *matHeaderCellDef>Remove from favorites</th>
+            <td mat-cell *matCellDef="let book" style="cursor: pointer;">
+              <button mat-button color="warn" (click)="removeFavoriteBook(book)">Unfavorite</button>
+            </td>
+          </ng-container>
+          <ng-container matColumnDef="id">
+            <th mat-header-cell *matHeaderCellDef>Id</th>
+            <td mat-cell *matCellDef="let book" [routerLink]="['/books', book.id]" style="cursor: pointer;">{{book.id}}
+            </td>
+          </ng-container>
+          <ng-container matColumnDef="title">
+            <th mat-header-cell *matHeaderCellDef>Title</th>
+            <td mat-cell *matCellDef="let book" [routerLink]="['/books', book.id]" style="cursor: pointer;">
+              {{book.title}}
+            </td>
+          </ng-container>
+          <ng-container matColumnDef="author">
+            <th mat-header-cell *matHeaderCellDef>Author</th>
+            <td mat-cell *matCellDef="let book" [routerLink]="['/books', book.id]" style="cursor: pointer;">
+              {{book.author}}
+            </td>
+          </ng-container>
+          <ng-container matColumnDef="genre">
+            <th mat-header-cell *matHeaderCellDef>Genre</th>
+            <td mat-cell *matCellDef="let book" [routerLink]="['/books', book.id]" style="cursor: pointer;">
+              {{book.genre}}
+            </td>
+          </ng-container>
+          <ng-container matColumnDef="year">
+            <th mat-header-cell *matHeaderCellDef>Year</th>
+            <td mat-cell *matCellDef="let book" [routerLink]="['/books', book.id]" style="cursor: pointer;">
+              {{book.year}}
+            </td>
+          </ng-container>
+          <ng-container matColumnDef="added">
+            <th mat-header-cell *matHeaderCellDef>Added</th>
+            <td mat-cell *matCellDef="let book" [routerLink]="['/books', book.id]" style="cursor: pointer;">
+              {{book.added}}
+            </td>
+          </ng-container>
+          <ng-container matColumnDef="checkOutCount">
+            <th mat-header-cell *matHeaderCellDef>Checkout count</th>
+            <td mat-cell *matCellDef="let book" [routerLink]="['/books', book.id]" style="cursor: pointer;">
+              {{book.checkOutCount}}
+            </td>
+          </ng-container>
+          <ng-container matColumnDef="status">
+            <th mat-header-cell *matHeaderCellDef>Status</th>
+            <td mat-cell *matCellDef="let book" [routerLink]="['/books', book.id]" style="cursor: pointer;">
+              {{book.status}}
+            </td>
+          </ng-container>
+          <ng-container matColumnDef="dueDate">
+            <th mat-header-cell *matHeaderCellDef>Due date</th>
+            <td mat-cell *matCellDef="let book" [routerLink]="['/books', book.id]" style="cursor: pointer;">
+              {{book.dueDate}}
+            </td>
+          </ng-container>
+          <ng-container matColumnDef="comment">
+            <th mat-header-cell *matHeaderCellDef>Comment</th>
+            <td mat-cell *matCellDef="let book" [routerLink]="['/books', book.id]" style="cursor: pointer;">
+              {{book.comment}}
+            </td>
+          </ng-container>
+          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+        </table>
+      </mat-card-content>
+    </div>
     <mat-card-content>
       <table mat-table [dataSource]="dataSource">
+        <ng-container matColumnDef="favoriteBtn">
+          <th mat-header-cell *matHeaderCellDef>Add to favorites</th>
+          <td mat-cell *matCellDef="let book" style="cursor: pointer;">
+            <button class="favorite-btn" (click)="addFavoriteBook(book)" style="cursor: pointer; background-color: #007bff; color: white; border-radius: 5px; padding: 10px 20px; margin-left: 5%; font-size: 16px; border: none;">Favorite</button>
+          </td>
+        </ng-container>
         <ng-container matColumnDef="id">
           <th mat-header-cell *matHeaderCellDef>Id</th>
           <td mat-cell *matCellDef="let book" [routerLink]="['/books', book.id]" style="cursor: pointer;">{{book.id}}

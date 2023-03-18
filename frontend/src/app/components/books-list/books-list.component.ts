@@ -14,7 +14,7 @@ import { PageEvent } from '@angular/material/paginator';
 })
 export class BooksListComponent implements OnInit {
 
-  displayedColumns: string[] = ['id', 'title', 'author', 'genre', 'year', 'added', 'checkOutCount', 'status', 'dueDate', 'comment'];
+  displayedColumns: string[] = ['favoriteBtn', 'id', 'title', 'author', 'genre', 'year', 'added', 'checkOutCount', 'status', 'dueDate', 'comment'];
   book: Book = {
       id: '',
       title: '',
@@ -28,6 +28,7 @@ export class BooksListComponent implements OnInit {
       comment: ''
     };
   showForm: boolean = false;
+  showFavoriteBooks: boolean = false;
   books$!: Observable<Page<Book>>;
   dataSource!: MatTableDataSource<Book>;
   searchText: string = '';
@@ -38,6 +39,8 @@ export class BooksListComponent implements OnInit {
   pageSize = 10; // number of items per page
   pageSizeOptions: number[] = [5, 10, 25, 100]; // available page size options
   currentPage = 0; // current page index
+  favoriteBooks: Book[] = [];
+  favoriteBooksDataSource!: MatTableDataSource<Book>;
 
   onPageChange(event: PageEvent) {
     this.currentPage = event.pageIndex;
@@ -58,6 +61,13 @@ export class BooksListComponent implements OnInit {
     this.totalItems = page.totalElements;
       this.dataSource = new MatTableDataSource(Array.from(page.content));
     });;
+    // get favorite books from local storage
+    this.favoriteBooks = JSON.parse(
+      localStorage.getItem("favoriteBooks") || "[]"
+    );
+    this.favoriteBooksDataSource = new MatTableDataSource(
+      this.favoriteBooks
+    );
   }
 
   searchBooks() {
@@ -175,5 +185,41 @@ export class BooksListComponent implements OnInit {
       const filterValue = this.searchText.trim().toLowerCase();
       this.dataSource.filter = filterValue;
     }
+  }
+
+  addFavoriteBook(book: Book) {
+    // find if book is already in favorite books
+    let bookExists = this.favoriteBooks.find((b) => b.id === book.id);
+    // if book is already in favorite books, alert user
+    if (bookExists) {
+      alert("Book is already in your favorite books");
+      return;
+    }
+
+    // add book to favorite books
+    this.favoriteBooks.push(book);
+    // save favorite books to local storage
+    localStorage.setItem("favoriteBooks", JSON.stringify(this.favoriteBooks));
+    // get favorite books from local storage
+    this.favoriteBooks = JSON.parse(
+      localStorage.getItem("favoriteBooks") || "[]"
+    );
+    this.favoriteBooksDataSource = new MatTableDataSource(
+      this.favoriteBooks
+    );
+  }
+
+  removeFavoriteBook(book: Book) {
+    // remove book from favorite books
+    this.favoriteBooks = this.favoriteBooks.filter((b) => b.id !== book.id);
+    // save favorite books to local storage
+    localStorage.setItem("favoriteBooks", JSON.stringify(this.favoriteBooks));
+    // get favorite books from local storage
+    this.favoriteBooks = JSON.parse(
+      localStorage.getItem("favoriteBooks") || "[]"
+    );
+    this.favoriteBooksDataSource = new MatTableDataSource(
+      this.favoriteBooks
+    );
   }
 }

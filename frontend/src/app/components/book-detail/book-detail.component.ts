@@ -32,6 +32,34 @@ export class BookDetailComponent implements OnInit {
         return book;
       }));
   }
+
+  checkoutBook(book: Book): void {
+    if (confirm("Are you sure you want to check out this book?")) {
+      book.status = "BORROWED";
+      const dueDate = new Date();
+      dueDate.setDate(dueDate.getDate() + 30);
+      const year = dueDate.getFullYear();
+      const month = ("0" + (dueDate.getMonth() + 1)).slice(-2);
+      const day = ("0" + dueDate.getDate()).slice(-2);
+      book.dueDate = `${year}-${month}-${day}`;
+      book.checkOutCount++;
+      this.bookService.saveBook(book).subscribe(
+        () => alert("Book checked out successfully!"),
+        (error) => console.error(error)
+      );
+    }
+  }
+
+  returnBook(book: Book): void {
+    book.status = "AVAILABLE";
+    book.dueDate = "";
+    book.checkOutCount--;
+    this.bookService.saveBook(book).subscribe(
+      () => alert("Book returned successfully!"),
+      (error) => console.error(error)
+    );
+  }
+
   deleteBook(book: Book): void {
     if (confirm("Are you sure you want to delete this book?")) {
     if (book.status === 'BORROWED') {

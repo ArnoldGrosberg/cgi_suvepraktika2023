@@ -46,6 +46,8 @@
         <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
         <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
       </mat-table>
+      <button mat-button color="primary" (click)="checkoutBook(book)" *ngIf="book.status !== 'BORROWED'">Check Out</button>
+      <button mat-button color="accent" (click)="returnBook(book)" *ngIf="book.checkOutCount >= 1">Return</button>
       <button mat-button color="warn" (click)="deleteBook(book)">Delete Book</button>
     </ng-container>
   </mat-card>
